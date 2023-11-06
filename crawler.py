@@ -14,28 +14,36 @@ def search(query, index):
     # catch exception
     if type(query) != str:
         print(f"Please provide a string, not {type(query)}.")
-        return
+        query = str(query)
+        #return
     
     # split the query into single words
     words = query.split()
     results = []
+    dummy = []
 
     # iterate over words in the query and get the location url
-    for word in words:
+    for idx, word in enumerate(words):
         word = word.lower()
 
-        # catch key error
+        # catch KeyError
         try:
             for url in index[word]:
-                # 0 is the url, 1 is the count for that location
-                results.append(url[0])
+                # all urls of the first query word are saved in results
+                if idx == 0:
+                    results.append(url[0])
+                # apply AND to only keep urls where all words appear
+                elif url in results:
+                    dummy.append(url)
+                    results = [url for url in dummy if url in results]
+                    dummy = []
         except KeyError:
             print(f"There is no {word} in the index.")
-            continue
+            return
 
     return results
 
-        
+
 
 
 # Initialize index as dictionary
@@ -84,7 +92,7 @@ while len(stack) > 0:
             for link in soup.find_all('a'):
                 url = link.get('href')
                 if domain not in url:
-                    if '/' not in url:
+                    if 'http' not in url:
                         url = domain + url
                     else:
                         continue
@@ -100,5 +108,5 @@ while len(stack) > 0:
     print(f"Visited websites: {visited}")
 
 # test search functionality
-results = search("Hi the plat is good", index)
+results = search("welcome to the home page", index)
 print(results)
