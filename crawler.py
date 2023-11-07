@@ -1,6 +1,9 @@
 # Import necessary packages
 import requests
 from bs4 import BeautifulSoup
+from whoosh.index import create_in
+from whoosh.fields import *
+from whoosh.qparser import QueryParser
 
 
 def search(query, index):
@@ -11,49 +14,35 @@ def search(query, index):
     query -- a string of words separated by a space
     index -- an index that contains all the crawled web content
     """
-    # catch exception
+    res = []
+
+    # type cast to string if necessary
     if type(query) != str:
-        print(f"Please provide a string, not {type(query)}.")
         query = str(query)
-        #return
     
-    # split the query into single words
-    words = query.split()
-    results = []
-    dummy = []
+    with index.searcher() as searcher:
+        # search for query in index
+        query = QueryParser("content", index.schema).parse(query)
+        results = searcher.search(query)
 
-    # iterate over words in the query and get the location url
-    for idx, word in enumerate(words):
-        word = word.lower()
+        # print all results
+        for r in results:
+            res.append(r)
 
-        # catch KeyError
-        try:
-            for url in index[word]:
-                # all urls of the first query word are saved in results
-                if idx == 0:
-                    results.append(url[0])
-                # apply AND to only keep urls where all words appear
-                elif url in results:
-                    dummy.append(url)
-                    results = [url for url in dummy if url in results]
-                    dummy = []
-        except KeyError:
-            print(f"There is no {word} in the index.")
-            return
-
-    return results
+    return res
 
 
-
-
-# Initialize index as dictionary
-index = {}
-
-# Initialize working stack
+# Initialize vars
 domain = "https://vm009.rz.uos.de/crawl/"
 source = domain + "index.html"
 stack = [source]
 visited = []
+
+schema = Schema(url=TEXT(stored=True), content=TEXT)
+
+# Create an index in the directory indexdr (the directory must already exist!)
+ix = create_in("indexdir", schema)
+writer = ix.writer()
 
 # Continue crawling until all subpages are crawled
 while len(stack) > 0:
@@ -69,24 +58,11 @@ while len(stack) > 0:
             # Parse content
             soup = BeautifulSoup(response.content, 'html.parser')
             content = soup.body.text
-            words = content.split()
+            #words = content.split()
 
-            # Update index
-            for word in words:
-                word = word.lower() # convert to lowercase
-                # ChatGPT: https://chat.openai.com/share/f7469407-09b5-426a-9354-03bd23445a8b
-                if word not in index:
-                    index[word] = [(stack[0], 1)]  # Initialize with a list containing the location and count
-                else:
-                    # Find the last entry in the list
-                    last_entry = index[word][-1]
-                    # Check if the word appeared at the same location
-                    if last_entry[0] == stack[0]:
-                        # Increment the count
-                        index[word][-1] = (stack[0], last_entry[1] + 1)
-                    else:
-                        # Add a new entry for the word at the current location
-                        index[word].append((stack[0], 1))
+            # Update the index
+            print(f"url: {stack[0]}, content: {content}")
+            writer.add_document(url=stack[0], content=content)
 
             # Push new links to work stack
             for link in soup.find_all('a'):
@@ -107,6 +83,8 @@ while len(stack) > 0:
     print(f"Stack left: {stack}")
     print(f"Visited websites: {visited}")
 
+writer.commit()
+
 # test search functionality
-results = search("welcome to the home page", index)
-print(results)
+results = search("welcome to the home page", ix)
+print(f"URLs that contain all words of your query: {results}")

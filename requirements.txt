@@ -2,4 +2,4 @@ requests
 numpy
 beautifulsoup4
 flask
-woosh
+whoosh
