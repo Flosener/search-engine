@@ -27,7 +27,7 @@ def search(query, index):
 
         # print all results
         for r in results:
-            res.append(r)
+            res.append(r['url'])
 
     return res
 
@@ -61,7 +61,6 @@ while len(stack) > 0:
             #words = content.split()
 
             # Update the index
-            print(f"url: {stack[0]}, content: {content}")
             writer.add_document(url=stack[0], content=content)
 
             # Push new links to work stack
