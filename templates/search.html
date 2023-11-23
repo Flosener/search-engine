@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
-<header>
-    <title>Search engine</title>
-</header>
-<body>
-    <header>
-        What do you want to search for?
-    </header>
-    <form action="search" method="get">
-        <input type="text" name="input">
-    </form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .center {
+                margin: auto;
+                width: 50%;
+                border: 5px solid green;
+                padding: 10px;
+                border-radius: 15px;
+            }
+            .text-center {
+                text-align: center;
+            }
+            .margin-bottom {
+            margin-bottom: 20px; /* starting at 20 pixels */
+        }
+        </style>
+        <title>Searcherino!</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+        
+    </head>
+    <body class="center">
+        <div class="text-center">
+            <header class="margin-bottom" >
+                SEARCHERINO!
+            </header>
+            <form action="search" method="get">
+                <p class="margin-bottom"> What do you want to search for?</p>
+                <input type="text" name="input">
+            </form>
+        </div>
+    </body>
 </html>
