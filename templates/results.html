@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<header>
+<head>
     <title>Search results</title>
-</header>
+</head>
 <body>
     <header>
         Your best hits are:
@@ -10,7 +10,7 @@
     <ul>
         {% for url in results: %}
         <li>
-            <a href="{{ url }}">{{url}}</a>
+            <a href="{{ url }}">{{url['title']}}</a>
         </li>
         {% endfor %}
     </ul>

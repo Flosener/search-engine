@@ -28,7 +28,7 @@ class Crawler():
 
             # print all results
             for r in results:
-                res.append(r['url'])
+                res.append({'url': r['url'], 'title': r['title'], 'content': r['content']})
 
         return res
 
@@ -39,7 +39,7 @@ class Crawler():
         stack = [source]
         visited = []
 
-        schema = Schema(url=TEXT(stored=True), content=TEXT)
+        schema = Schema(url=TEXT(stored=True), title=TEXT(stored=True), content=TEXT(stored=True))
 
         # Create an index in the directory indexdr (the directory must already exist!)
         ix = create_in("indexdir", schema)
@@ -58,11 +58,12 @@ class Crawler():
                 if response.status_code == 200:
                     # Parse content
                     soup = BeautifulSoup(response.content, 'html.parser')
+                    title = soup.head.text
                     content = soup.body.text
                     #words = content.split()
 
                     # Update the index
-                    writer.add_document(url=stack[0], content=content)
+                    writer.add_document(url=stack[0], title=title, content=content)
 
                     # Push new links to work stack
                     for link in soup.find_all('a'):
