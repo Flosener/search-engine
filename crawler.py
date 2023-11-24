@@ -59,6 +59,12 @@ class Crawler():
                     # Parse content
                     soup = BeautifulSoup(response.content, 'html.parser')
                     title = soup.head.text
+
+                    # Exclude header from body content
+                    header = soup.find('h1')
+                    if header:
+                        header.extract()  # Remove the header from the soup
+
                     content = soup.body.text
                     #words = content.split()
 
