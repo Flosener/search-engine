@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            body {
-                background-image: url('/static/img/results_back');
-            }
-        </style>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
-        <title>Search results</title>
-    </head>
-    <body>
-        <header>
-            Your best hits are:
+<head>
+    <title>Searcheroo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="center-page">
+        <header class="text-middle">
+            Search Results
         </header>
-        <ul>
-            {% for url in results: %}
-            <li>
-                <a href="{{ url }}">{{url}}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </body>
+        <div class="centered-list">
+            <ul>
+                {% for result in results: %}
+                <li>
+                    <a href="{{ result['url'] }}">
+                        <strong>{{ result['title'] }}</strong>
+                    </a>
+                    <p>
+                        {{ result['content'][:100] }}<br>
+                        {{ result['content'][100:200] }}
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Rest of your content goes here -->
+    </div>
+</body>
 </html>

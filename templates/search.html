@@ -1,61 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background-color: rgb(32, 178, 124); /* Background color for the body */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
-        }
-        .text-middle {
-            font-size: 20px; /* Change text size to 20 pixels */
-            font-family: "Impact"; /* Change font family */
-            font-style: verdana; /* Make the text italic */
-            /*font-weight: bold; Make the text bold */
-        }
-        .container {
-            background-image: url('/static/img/background.jpg');
-            background-size: 120%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            min-height: 100vh; /* Full viewport height */
-            padding: 20px; /* Add padding to push content away from edges */
-        }
-        .center {
-            margin: auto;
-            width: 100%;
-            max-width: 80%; /* Adjust the width as needed */
-            border: 5px solid rgb(2, 115, 15);
-            padding: 10px;
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.7); /* Background color for the content container with transparency */
-        }
-        .text-center {
-            text-align: center;
-        }
-        .margin-bottom {
-            margin-bottom: 10px; /* starting at 20 pixels */
-        }
-        /* Style for the search bar */
-        .search-bar {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            transform: translateY(-50%); /* Center vertically */
-            background-color: rgba(255, 255, 255, 0.7); /* Background color for the search bar with transparency */
-            padding: 10px;
-            z-index: 100; /* Ensure it's above the content */
-        }
-    </style>
     <title>Searcherino!</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="search-bar">
@@ -66,6 +13,7 @@
             <form action="search" method="get">
                 <p class="margin-bottom">What do you want to search for?</p>
                 <input type="text" name="input">
+                <input type="submit">
             </form>
         </div>
     </div>
