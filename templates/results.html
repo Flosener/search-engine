@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html>
-<header>
-    <title>Search results</title>
-</header>
-<body>
-    <header>
-        Your best hits are:
-    </header>
-    <ul>
-        {% for url in results: %}
-        <li>
-            <a href="{{ url }}">{{url}}</a>
-        </li>
-        {% endfor %}
-    </ul>
-</body>
+    <head>
+        <style>
+            body {
+                background-image: url('/static/img/results_back');
+            }
+        </style>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+        <title>Search results</title>
+    </head>
+    <body>
+        <header>
+            Your best hits are:
+        </header>
+        <ul>
+            {% for url in results: %}
+            <li>
+                <a href="{{ url }}">{{url}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
 </html>
