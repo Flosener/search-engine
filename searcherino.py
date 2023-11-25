@@ -1,15 +1,14 @@
 from flask import Flask, request, render_template
-from crawler import Crawler
-import os
+from crawler import search_ix, crawl
 from whoosh.index import open_dir
-import traceback
+import os
 
 app = Flask(__name__)
-indexdir = os.listdir("indexdir")
 
-@app.errorhandler(500)
-def internal_error(exception):
-   return "<pre>"+traceback.format_exc()+"</pre>"
+# create an 'indexdir' folder if it does not exist (important for saving content to index with Flask)
+if not os.path.isdir('indexdir'):
+        os.mkdir('indexdir')
+indexdir = os.listdir("indexdir")
 
 @app.route("/")
 def start():
@@ -23,9 +22,9 @@ def search():
         query = request.args['input']
         # if the index is built already, do not crawl again
         if len(indexdir) == 0:
-            index = Crawler.crawl()
+            index = crawl()
         else:
             index = open_dir("indexdir")
-        results = Crawler.search(query, index)
+        results = search_ix(query, index)
 
         return render_template("results.html", results=results)
